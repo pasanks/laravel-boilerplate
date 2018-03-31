@@ -1,40 +1,89 @@
 @extends('frontend.layouts.app')
 
-@section('title', app_name() . ' | '.__('navs.general.home'))
+
 
 @section('content')
     <div class="row mb-4">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <i class="fa fa-home"></i> {{ __('navs.general.home') }}
-                </div>
-                <div class="card-body">
-                    {{ __('strings.frontend.welcome_to', ['place' => app_name()]) }}
-                </div>
-            </div><!--card-->
-        </div><!--col-->
+        
     </div><!--row-->
 
     <div class="row mb-4">
-        <div class="col">
-            <example-component></example-component>
-        </div><!--col-->
+       @include('frontend.includes.nav')  
     </div><!--row-->
 
-    <div class="row">
-        <div class="col">
+
+         <div class="row justify-content-center align-items-center">
+        <div class="col col-sm-8 align-self-center">
             <div class="card">
                 <div class="card-header">
-                    <i class="fa fa-fort-awesome"></i> Font Awesome {{ __('strings.frontend.test') }}
-                </div>
+                    <strong>
+                        {{ __('labels.frontend.auth.login_box_title') }}
+                    </strong>
+                </div><!--card-header-->
+
                 <div class="card-body">
-                    <i class="fa fa-home"></i>
-                    <i class="fa fa-facebook"></i>
-                    <i class="fa fa-twitter"></i>
-                    <i class="fa fa-pinterest"></i>
-                </div><!--card-body-->
+                    {{ html()->form('POST', route('frontend.auth.login.post'))->open() }}
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    {{ html()->label(__('validation.attributes.frontend.email'))->for('email') }}
+
+                                    {{ html()->email('email')
+                                        ->class('form-control')
+                                        ->placeholder(__('validation.attributes.frontend.email'))
+                                        ->attribute('maxlength', 191)
+                                        ->required() }}
+                                </div><!--form-group-->
+                            </div><!--col-->
+                        </div><!--row-->
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    {{ html()->label(__('validation.attributes.frontend.password'))->for('password') }}
+
+                                    {{ html()->password('password')
+                                        ->class('form-control')
+                                        ->placeholder(__('validation.attributes.frontend.password'))
+                                        ->required() }}
+                                </div><!--form-group-->
+                            </div><!--col-->
+                        </div><!--row-->
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        {{ html()->label(html()->checkbox('remember', true, 1) . ' ' . __('labels.frontend.auth.remember_me'))->for('remember') }}
+                                    </div>
+                                </div><!--form-group-->
+                            </div><!--col-->
+                        </div><!--row-->
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group clearfix">
+                                    {{ form_submit(__('labels.frontend.auth.login_button')) }}
+                                </div><!--form-group-->
+                            </div><!--col-->
+                        </div><!--row-->
+
+                        <div class="row">
+                            <div class="col">
+                                 @if (config('access.registration'))
+                    <li class="nav-item"><a href="{{route('frontend.auth.register')}}" class="nav-link {{ active_class(Active::checkRoute('frontend.auth.register')) }}">{{ __('navs.frontend.register') }}</a></li>
+                @endif
+                                <div class="form-group text-right">
+                                    <a href="{{ route('frontend.auth.password.reset') }}">{{ __('labels.frontend.passwords.forgot_password') }}</a>
+                                </div><!--form-group-->
+                            </div><!--col-->
+                        </div><!--row-->
+                    {{ html()->form()->close() }}
+
+                    
+                </div><!--card body-->
             </div><!--card-->
-        </div><!--col-->
-    </div><!--row-->
+        </div><!-- col-md-8 -->
+    </div><!-- row -->
+  
 @endsection
